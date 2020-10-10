@@ -1,6 +1,8 @@
 #!/bin/bash
 fil=/tmp/quotehostinfo$$
-echo compiled: `date` > $fil
+if [[ -n $1 ]]; then
+    echo compiled: $1 > $fil
+fi
 make -s tellcc >> $fil
 cat .host >> $fil
 echo \"`cat $fil | sed 's/.*/&\\\\n/'`\" | sed 's/\\n /\\n/g'

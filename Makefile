@@ -19,10 +19,19 @@ EX = #.exe        #needed for CYGWIN, UWIN
 YACC = byacc #Berkeley yacc, gnu yacc not compatible
 # -Dsparc7 needed for Solaris 2.7
 # -Dsparc8 needed for Solaris 2.8 or later
+
+# For reproducible builds
+DATE_FMT = +%Y-%m-%d
+ifdef SOURCE_DATE_EPOCH
+    BUILD_DATE ?= $(shell date -u -d "@$(SOURCE_DATE_EPOCH)" "$(DATE_FMT)" 2>/dev/null || date -u -r "$(SOURCE_DATE_EPOCH)" "$(DATE_FMT)" 2>/dev/null || date -u "$(DATE_FMT)")
+else
+    BUILD_DATE ?= $(shell date "$(DATE_FMT)")
+endif
+
 mira: big.o cmbnms.o data.o lex.o reduce.o steer.o trans.o types.o utf8.o y.tab.o \
 			    version.c miralib/.version fdate .host Makefile
 	$(CC) $(CFLAGS) -DVERS=`cat miralib/.version` -DVDATE="\"`./revdate`\"" \
-	    -DHOST="`./quotehostinfo`" -DMIRA_LIBDIR="\"$(LIBDIR)\"" version.c cmbnms.o y.tab.o data.o lex.o \
+	    -DHOST="`./quotehostinfo "$(BUILD_DATE)"`" -DMIRA_LIBDIR="\"$(LIBDIR)\"" version.c cmbnms.o y.tab.o data.o lex.o \
 	    big.o reduce.o steer.o trans.o types.o utf8.o -lm -o mira
 	strip mira$(EX)
 y.tab.c y.tab.h: rules.y
