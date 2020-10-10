@@ -42,7 +42,7 @@ word SPACELIMIT=DFLTSPACE,DICSPACE=DFLTDICSPACE;
 
 extern FILE *s_out;
 word UTF8=0, UTF8OUT=0;
-extern char *vdate, *host;
+extern char *vdate, *host, *miralib_install_path;
 extern word version, ND;
 
 char *mkabsolute(char *), *strvers(word);
@@ -195,8 +195,7 @@ char *argv[];
     { char *m;
       /* note search order */
       if((m=getenv("MIRALIB")))miralib=m; else
-      if(checkversion(m="/usr/lib/miralib"))miralib=m; else
-      if(checkversion(m="/usr/local/lib/miralib"))miralib=m; else
+      if(checkversion(m=miralib_install_path))miralib=m; else
       if(checkversion(m="miralib"))miralib=m; else
       badlib=1;
     }
