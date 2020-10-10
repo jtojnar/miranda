@@ -52,6 +52,7 @@ cleanup:
 	./hostinfo > .host
 install:
 	make -s all
+	mkdir -p $(BINDIR) $(LIBDIR) $(MAN1DIR)
 	cp mira$(EX) $(BINDIR)
 	cp mira.1 $(MAN1DIR)
 	rm -rf $(LIBDIR)/miralib
