@@ -30,9 +30,10 @@ image on another machine, be root, and say
 	tar xzpf [pathname]
 where [pathname] is the gzipped tarfile.
 
-Before `make install' or `make release' you should  inspect  paths  BIN,
-LIB,  MAN at the top of the Makefile and modify if needed, to put things
-at the places in the root filing system where you want them to go.
+Before `make install' or `make release' you should inspect paths PREFIX,
+BINDIR,  LIBDIR  and  MANDIR  at the top  of the Makefile  and modify if
+needed,  to put things at the places in the root filing system where you
+want them to go.
 
 Be aware that the garbage collector works by scanning  the  C  stack  to
 find  anything  that  is  or  seems  to  be a pointer into the heap (see

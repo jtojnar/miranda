@@ -1,13 +1,16 @@
 all: mira miralib/menudriver exfiles
 #install paths relative to /
 #for linux, MacOS X, Cygwin:
-BIN=usr/bin
-LIB=usr/lib#beware no spaces after LIB
-MAN=usr/share/man/man1
+PREFIX=/usr
+MANDIR=$(PREFIX)/share/man
 #for Solaris:
-#BIN=usr/local/bin
-#LIB=usr/local/lib#beware no spaces after LIB
-#MAN=usr/local/man/man1
+#PREFIX=/usr/local
+#MANDIR=$(PREFIX)/man
+
+BINDIR=$(PREFIX)/bin
+LIBDIR=$(PREFIX)/lib#beware no spaces after LIBDIR
+MAN1DIR=$(MANDIR)/man1
+
 CC = gcc -w
 CFLAGS = #-O #-DCYGWIN #-DUWIN #-DIBMRISC #-Dsparc7 #-Dsparc8
 #be wary of using anything higher than -O as the garbage collector may fall over
@@ -49,25 +52,25 @@ cleanup:
 	./hostinfo > .host
 install:
 	make -s all
-	cp mira$(EX) /$(BIN)
-	cp mira.1 /$(MAN)
-	rm -rf /$(LIB)/miralib
+	cp mira$(EX) $(BINDIR)
+	cp mira.1 $(MAN1DIR)
+	rm -rf $(LIBDIR)/miralib
 	./protect
-	cp -pPR miralib /$(LIB)/miralib
+	cp -pPR miralib $(LIBDIR)/miralib
 	./unprotect
-	find /$(LIB)/miralib -exec chown `./ugroot` {} \;
+	find $(LIBDIR)/miralib -exec chown `./ugroot` {} \;
 release:
 	make -s all
-	-rm -rf usr
-	mkdir -p $(BIN) $(LIB) $(MAN)
-	cp mira$(EX) $(BIN)
-	cp mira.1 $(MAN)
+	-rm -rf .$(PREFIX)
+	mkdir -p .$(BINDIR) .$(LIBDIR) .$(MAN1DIR)
+	cp mira$(EX) .$(BINDIR)
+	cp mira.1 .$(MAN1DIR)
 	./protect
-	cp -pPR miralib $(LIB)/miralib
+	cp -pPR miralib .$(LIBDIR)/miralib
 	./unprotect
-	find usr -exec chown `./ugroot` {} \;
-	tar czf `rname`.tgz ./usr
-	-rm -rf usr
+	find .$(PREFIX) -exec chown `./ugroot` {} \;
+	tar czf `rname`.tgz .$(PREFIX)
+	-rm -rf .$(PREFIX)
 SOURCES = .xversion big.c big.h gencdecs data.h data.c lex.h lex.c reduce.c rules.y \
           steer.c trans.c types.c utf8.h utf8.c version.c fdate.c
 sources: $(SOURCES); @echo $(SOURCES)
